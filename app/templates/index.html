@@ -1,0 +1,33 @@
+{% extends "bootstrap/base.html" %}
+	{% block title %}Bitcoin Price{% endblock %}
+    {% block content %}
+    	<div id="varID">${{ price }}</div>
+
+		<script>
+		    var interval = 1000;  // 1000 = 1 second, 3000 = 3 seconds
+			function doAjax() {
+    			$.ajax({
+		            type: 'get',
+		            url: '/ajax',
+		            data: $(this).serialize(),
+		            dataType: 'json',
+		            success: function (data) {
+    						$('#varID').html("\$" + data["amount"]);
+		            },
+		            complete: function (data) {
+		                    // Schedule the next
+		                    setTimeout(doAjax, interval);
+		        	}
+    			});
+			}
+			setTimeout(doAjax, interval);
+
+		</script>
+
+
+	{% endblock %}
+	{% block styles %}
+		{{super()}}
+		<link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+	{% endblock %}
+
